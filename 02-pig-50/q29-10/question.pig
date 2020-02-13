@@ -40,3 +40,12 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+fs -rm -f -r data.csv;
+fs -put data.csv
+
+s = FOREACH u GENERATE $3, (CASE ToString((ToDate($3,'yyyy-MM-dd')),'M') WHEN '1' THEN 'ene' WHEN '2' THEN 'feb' WHEN '3' THEN 'mar' WHEN '4' THEN 'abr' WHEN '5' THEN 'may' WHEN '6' THEN 'jun' WHEN '7' THEN 'jul' WHEN '8' THEN 'ago' WHEN '9' THEN 'sep' WHEN '10' THEN 'oct' WHEN '11' THEN 'nov' WHEN '12' THEN 'dic' END), ToString((ToDate($3,'yyyy-MM-dd')),'MM'), GetMonth(ToDate($3, 'yyyy-MM-dd'));
+
+DUMP s;
+
+STORE s INTO 'output' USING PigStorage(',');
+fs -copyToLocal output output;

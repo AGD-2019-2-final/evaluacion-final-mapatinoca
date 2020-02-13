@@ -28,6 +28,11 @@
 -- 
 fs -rm -f -r output;
 --
+-- >>> Escriba su respuesta a partir de este punto <<<
+--
+fs -rm -f -r data.csv
+fs -put data.csv
+
 u = LOAD 'data.csv' USING PigStorage(',') 
     AS (id:int, 
         firstname:CHARARRAY, 
@@ -35,6 +40,14 @@ u = LOAD 'data.csv' USING PigStorage(',')
         birthday:CHARARRAY, 
         color:CHARARRAY, 
         quantity:INT);
---
--- >>> Escriba su respuesta a partir de este punto <<<
---
+
+
+R1 = FOREACH u GENERATE $2,UPPER($2),LOWER($2);
+R2 = ORDER R1 BY $0;
+R3 = FOREACH R2 GENERATE CONCAT($0,',',$1,',',$2);
+DUMP R3;
+
+
+STORE R3 INTO 'output';
+
+fs -copyToLocal output output

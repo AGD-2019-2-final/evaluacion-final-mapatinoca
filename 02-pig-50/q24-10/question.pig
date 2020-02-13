@@ -26,3 +26,9 @@ u = LOAD 'data.csv' USING PigStorage(',')
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
 
+t = FOREACH u GENERATE REGEX_EXTRACT($3, '-[0-9]*',0);
+z = FOREACH t GENERATE REGEX_EXTRACT($0, '[0-1][0-9]',0);
+DUMP z;
+STORE z INTO 'output24' USING PigStorage ('\t');
+DUMP z
+

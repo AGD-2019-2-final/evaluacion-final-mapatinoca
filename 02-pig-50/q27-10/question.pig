@@ -26,3 +26,13 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+fs -rm -f -r data.csv;
+fs -put data.csv
+
+s = FILTER u BY SUBSTRING ($1, 0, 1) >='A';
+t = FOREACH s GENERATE INDEXOF($1, 'ia', 0);
+
+DUMP t;
+
+STORE t INTO 'output';
+fs -copyToLocal output output;

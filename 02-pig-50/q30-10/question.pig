@@ -41,3 +41,12 @@ u = LOAD 'data.csv' USING PigStorage(',')
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
 
+fs -rm -f -r data.csv;
+fs -put data.csv
+
+s = FOREACH u GENERATE $3, ToString((ToDate($3,'yyyy-MM-dd')),'dd'), GetDay(ToDate($3, 'yyyy-MM-dd')),(CASE ToString((ToDate($3,'yyyy-MM-dd')),'EEE') WHEN 'Thu' THEN 'jue' WHEN 'Sun' THEN 'dom' WHEN 'Wed' THEN 'mie' WHEN 'Fri' THEN 'vie' WHEN 'Mon' THEN 'lun' WHEN 'Tue' THEN 'mar' END), (CASE ToString((ToDate($3,'yyyy-MM-dd')),'EEE') WHEN 'Thu' THEN 'jueves' WHEN 'Sun' THEN 'domingo' WHEN 'Wed' THEN 'miercoles' WHEN 'Fri' THEN 'viernes' WHEN 'Mon' THEN 'lunes' WHEN 'Tue' THEN 'martes' END);
+
+DUMP s;
+
+STORE s INTO 'output' USING PigStorage(',');
+fs -copyToLocal output output;

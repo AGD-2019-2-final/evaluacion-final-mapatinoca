@@ -17,6 +17,11 @@
 -- 
 fs -rm -f -r output;
 --
+-- >>> Escriba su respuesta a partir de este punto <<<
+--
+fs -rm -f -r data.csv
+fs -put data.csv
+
 u = LOAD 'data.csv' USING PigStorage(',') 
     AS (id:int, 
         firstname:CHARARRAY, 
@@ -24,6 +29,13 @@ u = LOAD 'data.csv' USING PigStorage(',')
         birthday:CHARARRAY, 
         color:CHARARRAY, 
         quantity:INT);
---
--- >>> Escriba su respuesta a partir de este punto <<<
---
+
+
+R1 = FILTER u BY NOT $4 IN ('blue','black');
+R2 = FOREACH R1 GENERATE $1,$4;
+DUMP R2;
+
+
+STORE R2 INTO 'output' USING PigStorage(',');
+
+fs -copyToLocal output output

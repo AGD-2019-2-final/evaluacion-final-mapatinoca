@@ -29,4 +29,13 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+fs -rm -f -r data.csv;
+fs -put data.csv
 
+s = FOREACH u GENERATE GetYear(ToDate($3, 'yyyy-MM-dd')), ToString((ToDate($3,'yyyy-MM-dd')),'yy');
+
+DUMP s;
+
+STORE s INTO 'output' USING PigStorage(',');
+
+fs -copyToLocal output output;
