@@ -39,3 +39,9 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+
+
+SELECT tb0.c1,tb0.c2,(CASE WHEN 'A' = tb0.c2 THEN tb1.c4["A"] ELSE (CASE WHEN 'B' = tb0.c2 THEN tb1.c4["B"] ELSE (CASE WHEN "C" = tb0.c2 THEN tb1.c4["C"] ELSE (CASE WHEN "D" = tb0.c2 THEN tb1.c4["D"] ELSE (CASE WHEN "E" = tb0.c2 THEN tb1.c4["D"] ELSE '' END) END) END) END) END) FROM tbl0 tb0 JOIN tbl1 tb1 ON (tb0.c1 = tb1.c1);

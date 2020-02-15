@@ -39,5 +39,18 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+
+
+--SELECT upper (NVL(c5[0],'')),
+--upper (NVL(c5[1],'')),
+--upper (NVL(c5[2],'')),
+--upper (NVL(c5[3],'')),
+--upper (NVL(c5[4],''))
+--FROM tbl0;
+
+SELECT CONCAT(UPPER(c5[0]),':', UPPER(c5[1]), CASE WHEN c5[2] IS NULL THEN '' ELSE CONCAT(':',UPPER(c5[2])) END, CASE WHEN c5[3] IS NULL THEN '' ELSE CONCAT(':',UPPER(c5[3])) END, CASE WHEN c5[4] IS NULL THEN '' ELSE CONCAT(':', UPPER(c5[4])) END) FROM tbl0;
 
 
